@@ -41,7 +41,9 @@ public class AuthTokenServiceTest {
         int expireSeconds = 60 * 60 * 24 * 365;
         SecretKey secretKey = Keys.hmacShaKeyFor("abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz1234567890".getBytes());
 
-        String jwtStr = Ut.Jwt.createToken(secretKey, expireSeconds, Map.of("name", "john", "age", 23));
+        Map<String, Object> originPayload = Map.of("name", "john", "age", 23);
+
+        String jwtStr = Ut.Jwt.createToken(secretKey, expireSeconds, originPayload);
         assertThat(jwtStr).isNotBlank();
 
         Jwt<?,?> parsedJwt = Jwts
@@ -49,6 +51,10 @@ public class AuthTokenServiceTest {
                 .verifyWith(secretKey)
                 .build()
                 .parse(jwtStr);
+
+        Map<String, Object> parsedPayload = (Map<String, Object>) parsedJwt.getPayload();
+
+        assertThat(parsedPayload).containsAllEntriesOf(originPayload);
     }
 
     @Test
