@@ -1,8 +1,6 @@
-package com.example.jwt;
+package com.example.jwt.domain.member.member.service;
 
 import com.example.jwt.domain.member.member.entity.Member;
-import com.example.jwt.domain.member.member.service.AuthTokenService;
-import com.example.jwt.domain.member.member.service.MemberService;
 import com.example.jwt.standard.util.Ut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,7 +49,7 @@ public class AuthTokenServiceTest {
     }
 
     @Test
-    @DisplayName("access token 생성")
+    @DisplayName("user1 - access token 생성")
     void accessToken() {
 
         // jwt -> access token jwt
