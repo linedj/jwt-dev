@@ -58,6 +58,12 @@ public class ApiV1MemberController {
 
         String accessToken = memberService.genAccessToken(member);
         Cookie accsessTokenCookie = new Cookie("accessToken", accessToken);
+        accsessTokenCookie.setDomain("localhost");
+        accsessTokenCookie.setPath("/");
+        accsessTokenCookie.setHttpOnly(true);
+        accsessTokenCookie.setSecure(true);
+        accsessTokenCookie.setAttribute("SameSite", "Strict");
+
         response.addCookie(accsessTokenCookie);
 
         String authToken = memberService.getAuthToken(member);
