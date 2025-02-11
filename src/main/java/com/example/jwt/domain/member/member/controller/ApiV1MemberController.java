@@ -3,6 +3,7 @@ package com.example.jwt.domain.member.member.controller;
 import com.example.jwt.domain.member.member.dto.MemberDto;
 import com.example.jwt.domain.member.member.entity.Member;
 import com.example.jwt.domain.member.member.service.MemberService;
+import com.example.jwt.domain.post.post.service.PostService;
 import com.example.jwt.global.Rq;
 import com.example.jwt.global.dto.RsData;
 import com.example.jwt.global.exception.ServiceException;
@@ -20,6 +21,7 @@ public class ApiV1MemberController {
 
     private final MemberService memberService;
     private final Rq rq;
+    private final PostService postService;
 
     record JoinReqBody(@NotBlank String username, @NotBlank String password, @NotBlank String nickname) {}
 
@@ -58,6 +60,7 @@ public class ApiV1MemberController {
 
         String accessToken = memberService.genAccessToken(member);
         Cookie accsessTokenCookie = new Cookie("accessToken", accessToken);
+
         accsessTokenCookie.setDomain("localhost");
         accsessTokenCookie.setPath("/");
         accsessTokenCookie.setHttpOnly(true);
@@ -66,15 +69,13 @@ public class ApiV1MemberController {
 
         response.addCookie(accsessTokenCookie);
 
-        String authToken = memberService.getAuthToken(member);
-
         return new RsData<>(
                 "200-1",
                 "%s님 환영합니다.".formatted(member.getNickname()),
                 new LoginResBody(
                         new MemberDto(member),
                         member.getApiKey(),
-                        authToken
+                        accessToken
                 )
         );
     }
